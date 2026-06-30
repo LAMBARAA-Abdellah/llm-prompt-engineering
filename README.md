@@ -186,6 +186,182 @@ print(comparison)
 
 ---
 
+## Example Responses
+
+Below are **example outputs** (like terminal captures) showing what you get when running the project.
+
+### CLI — Project Banner
+
+```
+╔══════════════════════════════════════════════════════════════╗
+║  Prompt Engineering with Python using LLMs                     ║
+║  Master BDCC — Université Mohammed VI Polytechnique          ║
+╚══════════════════════════════════════════════════════════════╝
+```
+
+### CLI — Prompt Techniques Demo
+
+**Input:**
+```
+Review: "The movie had stunning visuals but the plot was confusing."
+```
+
+| Technique | Example Response | Time | Tokens |
+|-----------|------------------|------|--------|
+| **Simple** | `negative` | 0.82s | 45 |
+| **Zero-Shot** | `negative` | 0.71s | 38 |
+| **Few-Shot** | `negative` | 1.12s | 156 |
+| **Chain of Thought** | `Step 1: "stunning visuals" → positive`<br>`Step 2: "confusing plot" → negative`<br>`Step 3: negative dominates`<br>`Final Answer: negative` | 1.85s | 210 |
+| **Role Prompt** | `As an expert analyst, the conflicting signals lean negative due to plot criticism.` → `negative` | 0.95s | 92 |
+| **Step-Back** | `Principles: tone, dominant sentiment, negation...` → `negative` | 2.40s | 380 |
+| **Tree of Thoughts** | `Branch A: positive (0.4) \| Branch B: negative (0.8) \| Branch C: negative (0.7)` → `negative` | 3.10s | 450 |
+
+---
+
+### Sentiment Analysis — Single Review
+
+**Input:**
+```
+"This movie was absolutely brilliant!"
+```
+
+**Zero-Shot Response:**
+```
+positive
+```
+
+**Few-Shot Response:**
+```
+Based on the examples provided, this review expresses strong positive sentiment.
+Output: positive
+```
+
+**Chain of Thought Response:**
+```
+Let's think step by step:
+1. "absolutely brilliant" is a strong positive indicator.
+2. No negative words detected.
+3. Overall tone is enthusiastic and positive.
+
+Final Answer: positive
+```
+
+---
+
+### Spam Detection — Single SMS
+
+**Input:**
+```
+"FREE entry to win a £1000 prize! Text WIN to 81234 now!"
+```
+
+| Technique | Example Response |
+|-----------|------------------|
+| Zero-Shot | `spam` |
+| Few-Shot | `spam` |
+| Chain of Thought | `Step 1: promotional language "FREE", "win" → spam signal`<br>`Step 2: urgency + unknown shortcode → spam`<br>`Final Answer: spam` |
+| Role Prompt | `This matches classic SMS spam patterns: unsolicited offer + call to action.` → `spam` |
+
+**Input (ham):**
+```
+"Hey, are we still meeting for lunch tomorrow?"
+```
+
+**Response:** `ham`
+
+---
+
+### Evaluation — Technique Comparison Table
+
+```
+============================================================
+  Sentiment Analysis — Technique Comparison
+============================================================
+
+┌──────────────────┬──────────┬───────────┬────────┬──────────┬──────────────┬──────────────┐
+│    Technique     │ Accuracy │ Precision │ Recall │ F1 Score │ Avg Time (s) │ Total Cost $ │
+├──────────────────┼──────────┼───────────┼────────┼──────────┼──────────────┼──────────────┤
+│ simple           │  0.7500  │  0.7600   │ 0.7500 │  0.7450  │    0.680     │    0.0021    │
+│ zero_shot        │  0.8500  │  0.8600   │ 0.8500 │  0.8480  │    0.720     │    0.0024    │
+│ few_shot         │  0.9000  │  0.9100   │ 0.9000 │  0.8980  │    1.150     │    0.0048    │
+│ chain_of_thought │  0.8800  │  0.8850   │ 0.8800 │  0.8790  │    1.920     │    0.0062    │
+│ role             │  0.9000  │  0.9050   │ 0.9000 │  0.8990  │    0.980     │    0.0035    │
+│ self_consistency │  0.9200  │  0.9250   │ 0.9200 │  0.9190  │    3.500     │    0.0105    │
+└──────────────────┴──────────┴───────────┴────────┴──────────┴──────────────┴──────────────┘
+```
+
+---
+
+### Evaluation — Metrics Panel
+
+```
+╭────────────────── Evaluation Metrics ──────────────────╮
+│  accuracy:  0.9000                                     │
+│  precision: 0.9100                                     │
+│  recall:    0.9000                                     │
+│  f1_score:  0.8980                                     │
+╰────────────────────────────────────────────────────────╯
+```
+
+---
+
+### Text-to-Image — Example Output
+
+**Prompt:**
+```
+A professional academic workspace with books, a laptop showing Python code, and coffee
+```
+
+**Console Output:**
+```
+============================================================
+  Text-to-Image: A professional academic workspace with books...
+============================================================
+
+2026-07-01 10:30:15 | INFO | Generating image with dall-e-3...
+2026-07-01 10:30:28 | INFO | Generated 1 image(s)
+2026-07-01 10:30:30 | INFO | Image saved to images/generated/txt2img_20260701_103028.png
+
+Image saved to: images/generated/txt2img_20260701_103028.png
+```
+
+---
+
+### Image-to-Image — Example Output
+
+**Prompt:**
+```
+Transform this landscape into a snowy winter scene with aurora borealis
+```
+
+**Console Output:**
+```
+============================================================
+  Image-to-Image: Transform this landscape into a snowy winter scene...
+============================================================
+
+2026-07-01 10:35:10 | INFO | Transforming image: images/source_placeholder.png
+2026-07-01 10:35:25 | INFO | Transformed image saved to images/transformed/img2img_20260701_103525.png
+
+Transformed image saved to: images/transformed/img2img_20260701_103525.png
+```
+
+---
+
+### Dataset Statistics — IMDB
+
+```
+Dataset Statistics:
+  total_samples: 20
+  positive_count: 10
+  negative_count: 10
+  avg_text_length: 52.3
+  min_text_length: 28
+  max_text_length: 78
+```
+
+---
+
 ## Output Artifacts
 
 After running experiments, check the `outputs/` directory:
@@ -199,17 +375,6 @@ After running experiments, check the `outputs/` directory:
 | `cm_*.png` | Confusion matrices per technique |
 | `Prompt_Engineering_Presentation.pptx` | Generated slides |
 | `Prompt_Engineering_Report.pdf` | Academic report |
-
----
-
-## Screenshots
-
-> Place screenshots of CLI output, charts, and generated images in `images/screenshots/` after running the project.
-
-Expected outputs:
-- Rich console tables with technique comparison
-- Matplotlib bar charts comparing accuracy, speed, cost
-- DALL-E generated images in `images/generated/`
 
 ---
 
